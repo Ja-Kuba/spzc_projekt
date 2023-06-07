@@ -54,7 +54,7 @@ class PacketProcessor():
     #
     #  Thread functions should not be called from outside
     #
-    def __processJob(self, job):
+    def processJob(self, job):
             for p in job:
                 print(f"P: {p}")
 
@@ -65,7 +65,7 @@ class PacketProcessor():
                 sleep(1)
                 continue
             job = queue.get()
-            self.__processJob(job)
+            self.processJob(job)
         
         print(f"{self.name} THREAD STOPPED")
 
@@ -81,9 +81,14 @@ class DevProcessor(PacketProcessor):
     def process(self, packet:Ether):
         #self.printPacket(packet)
         #self.saveToPcap(packet)
-
         pass
     
+    
+    def processJob(self, job):
+        super().processJob(job)
+                  
+
+
     def saveToPcap(self,packets):
         scapy.wrpcap('sniffed.pcap', packets, append=True)
 
