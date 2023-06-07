@@ -11,3 +11,10 @@ For Windows scapy needs [npcap](https://npcap.com/) to work
 
 
 
+# Some useful data
+## Protocols
+Protocols numbers specification: 
+https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
+
+- 6 **TPC**
+- 17 **UDP**

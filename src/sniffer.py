@@ -1,19 +1,26 @@
 import scapy.all as scapy
 from scapy.layers import http
-from packet_processor import DevProcessor
+from packets_manager import PacketsManager, PacketsManagerTcpUdp
 
 class Sniffer:
-    def __init__(self, interface = None) -> None:
+    def __init__(self, manager=PacketsManager, interface = None ) -> None:
         self.interface = interface
+        self.manager = manager
 
 
 
 
-    def sniff(self):
-        p = DevProcessor()
+    def sniff(self):    
+        print(f"filter: {self.manager.filter}")
         print("start sniffing...")
-        scapy.sniff(iface = self.interface, store=False, prn=p.process)
-        #scapy.sniff()
+        scapy.sniff(
+            iface = self.interface,
+            filter = self.manager.filter,
+            store=False, #do not store packets by sniff function
+            prn=self.manager.manage,
+            #count=50, # just for debugging
+        )
+
 
 
     def getIfacesList(self):
@@ -21,11 +28,17 @@ class Sniffer:
         
         return interfaces
 
+    def printIfaces(self):
+        ifaces = self.getIfacesList()
+        for i in ifaces:
+            print(i)
+
+
+
+
 
 
 if __name__ == "__main__":
-    s = Sniffer()
-    ifaces = s.getIfacesList()
-    for i in ifaces:
-        print(i)
+    p = PacketsManagerTcpUdp()
+    s = Sniffer(p)
     s.sniff()
