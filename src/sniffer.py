@@ -10,7 +10,7 @@ class Sniffer:
 
 
 
-    def sniff(self):    
+    def sniff(self,max_packets=None):    
         print(f"filter: {self.manager.filter}")
         print("start sniffing...")
         scapy.sniff(
@@ -18,7 +18,7 @@ class Sniffer:
             filter = self.manager.filter,
             store=False, #do not store packets by sniff function
             prn=self.manager.manage,
-            #count=50, # just for debugging
+            count=max_packets, # just for debugging
         )
 
 
@@ -34,11 +34,13 @@ class Sniffer:
             print(i)
 
 
-
+    def stop(self):
+        self.manager.stop()
 
 
 
 if __name__ == "__main__":
     p = PacketsManagerTcpUdp()
     s = Sniffer(p)
-    s.sniff()
+    s.sniff(max_packets=50)
+    s.stop()
