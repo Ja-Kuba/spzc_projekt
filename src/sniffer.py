@@ -1,6 +1,6 @@
 import scapy.all as scapy
-from scapy.layers import http
-from packets_manager import PacketsManager, PacketsManagerTcpUdp
+from src.packets_manager import PacketsManager
+
 
 class Sniffer:
     def __init__(self, manager=PacketsManager, interface = None ) -> None:
@@ -14,8 +14,8 @@ class Sniffer:
         print(f"filter: {self.manager.filter}")
         print("start sniffing...")
         scapy.sniff(
-            iface = self.interface,
-            filter = self.manager.filter,
+            iface=self.interface,
+            filter=self.manager.filter,
             store=False, #do not store packets by sniff function
             prn=self.manager.manage,
             count=max_packets, # just for debugging

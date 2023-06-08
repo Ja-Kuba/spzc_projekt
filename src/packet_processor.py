@@ -1,11 +1,8 @@
-from abc import ABC, abstractmethod
 from scapy.layers.l2 import Ether
-import scapy.all as scapy
-from scapy.layers.inet6 import IPv6
-
-from threading import Thread, Event
+from threading import Thread
 from queue import Queue
 from time import sleep
+
 
 
 

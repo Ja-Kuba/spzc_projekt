@@ -20,7 +20,7 @@ class NetworkOracle:
                 for line in f:
                     self.addProphecy(line.strip())
         
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             raise FileNotFoundError(f'Oracle wisdom source file "{self.wisdom_source}" not found')
 
 

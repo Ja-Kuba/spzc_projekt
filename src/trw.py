@@ -1,7 +1,6 @@
-from hashlib import md5
 from dataclasses import dataclass, field
 
-#Threshold Random Walk implementation based on:
+# Threshold Random Walk implementation based on:
 # Jaeyeon Jung, Vern Paxson, Arthur W. Berger, and Hari Balakrishnan
 # "Fast Portscan Detection Using Sequential Hypothesis Testing"
 
@@ -19,15 +18,15 @@ class RemoteHostData:
 
 
 class TRW:
-    def __init__(self,Pd,Pf,theta0,theta1) -> None:
+    def __init__(self, Pd, Pf, theta0, theta1) -> None:
         self.hosts_stats:dict[RemoteHostData] = dict()
         self.Pd = Pd 
         self.Pf = Pf
         self.theta0 = theta0
         self.theta1 = theta1
         
-        self.n0 = (1-Pd)/(1-Pf)
-        self.n1 = Pd/Pf
+        self.n0 = (1 - Pd) / (1 - Pf)
+        self.n1 = Pd / Pf
 
 
     
@@ -49,14 +48,14 @@ class TRW:
             self.update(new_host, succesful, ip_dst)
 
 
-    def update(self, hd:RemoteHostData, succesful, ip_dst):
+    def update(self, hd:RemoteHostData, successful, ip_dst):
         if ip_dst in hd.Ds:
             #there already was first connection to that local host
             return
         
         hd.Ds.add(ip_dst)
         hd.conn_num+=1
-        Yi =(0 if succesful else 1)
+        Yi = (0 if successful else 1)
         hd.Ls *= self.liklihoodRatio(Yi)
         self.updateStatus(hd)
 

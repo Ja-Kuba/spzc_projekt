@@ -1,7 +1,6 @@
-from packet_processor import PacketProcessor
-from trw_processor import TRWProcessor
+from src.trw_processor import TRWProcessor
 import scapy.all as scapy
-from scapy.layers.inet import IP, TCP, UDP
+from scapy.layers.inet import TCP, UDP
 
 class PacketsManager:
     def __init__(self, filter_arg) -> None:
@@ -29,8 +28,9 @@ class PacketsManagerTcpUdp(PacketsManager):
     def __init__(self, *args, **kwargs) -> None:
         kwargs['filter_arg'] = 'tcp or udp'
         super().__init__(*args, **kwargs)
-        self.initPacketProcessors()
         self.recorded_traffic = []
+        
+        self.initPacketProcessors()
 
     def initPacketProcessors(self):
         self.dev_proc = TRWProcessor()

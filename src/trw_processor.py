@@ -1,8 +1,7 @@
-from packet_processor import PacketProcessor
-from network_oracle import NetworkOracle
-from trw import TRW
-
-from scapy.layers.inet import IP, TCP, UDP
+from src.packet_processor import PacketProcessor
+from src.network_oracle import NetworkOracle
+from src.trw import TRW
+from scapy.layers.inet import IP, TCP
 
 
 #-----------------------------------------------------
@@ -24,7 +23,7 @@ class TRWProcessor(PacketProcessor):
         if not packet['TCP'].flags == 0x02 or not IP in packet:
             return
         
-        print(f"CHCK: {packet}; {packet.flags}")
+        print(f"CHECK: {packet}; {packet.flags}")
         dst_port = packet[TCP].dport
         if IP in packet:
             ip_src = packet[IP].src
