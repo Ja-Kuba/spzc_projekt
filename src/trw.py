@@ -1,4 +1,3 @@
-from hashlib import md5
 from dataclasses import dataclass, field
 
 # Threshold Random Walk implementation based on:
@@ -16,11 +15,11 @@ class RemoteHostData:
     Ds: set = field(default_factory=set)  # set of ip's to which host has connected to
     Ss: int = PENDING  # decision_state
     Ls: float = 1.  # likelihood ratio
-    conn_num: str = 0
+    conn_num: int = 0
 
 
 class TRW:
-    def __init__(self, Pd, Pf, theta0, theta1) -> None:
+    def __init__(self, Pd, Pf, theta0, theta1):
         self.hosts_stats: dict[RemoteHostData] = dict()
         self.Pd = Pd
         self.Pf = Pf
@@ -46,26 +45,26 @@ class TRW:
             self.hosts_stats[key] = new_host
             self.update(new_host, successful, ip_dst)
 
-    def update(self, hd: RemoteHostData, succesful, ip_dst):
+    def update(self, hd: RemoteHostData, successful, ip_dst):
         if ip_dst in hd.Ds:
-            # there already was first connection to that local host
+            # there already was first connection to that localhost
             return
 
         hd.Ds.add(ip_dst)
         hd.conn_num += 1
-        Yi = (0 if succesful else 1)
-        hd.Ls *= self.liklihoodRatio(Yi)
-        self.updateStatus(hd)
+        yi = (0 if successful else 1)
+        hd.Ls *= self.likelihood_ratio(yi)
+        self.update_status(hd)
 
-    def liklihoodRatio(self, Yi):
-        if Yi == 0:
+    def likelihood_ratio(self, yi):
+        if yi == 0:
             ratio = self.theta1 / self.theta0
         else:
             ratio = (1 - self.theta1) / (1 - self.theta0)
 
         return ratio
 
-    def updateStatus(self, hd: RemoteHostData):
+    def update_status(self, hd: RemoteHostData):
         if hd.conn_num >= 4:
             if hd.Ls >= self.n1:
                 hd.Ss = SCANNER

@@ -6,7 +6,7 @@ from time import sleep
 
 # Base interface for processor
 class PacketProcessor:
-    def __init__(self) -> None:
+    def __init__(self):
         self.name = "BASE_PROCESSOR"
         self.run = True
         self.queue = Queue()

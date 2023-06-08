@@ -1,9 +1,9 @@
 import scapy.all as scapy
-from packets_manager import PacketsManager, PacketsManagerTcpUdp
+from src.packets_manager import PacketsManager
 
 
 class Sniffer:
-    def __init__(self, manager=PacketsManager, interface=None) -> None:
+    def __init__(self, manager=PacketsManager, interface=None):
         self.interface = interface
         self.manager = manager
 
@@ -30,11 +30,3 @@ class Sniffer:
 
     def stop(self):
         self.manager.stop()
-
-
-if __name__ == "__main__":
-    p = PacketsManagerTcpUdp()
-    s = Sniffer(p)
-    s.sniff(max_packets=0)
-    s.stop()
-    p.save_to_pcap()
