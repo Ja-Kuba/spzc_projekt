@@ -161,3 +161,7 @@ cython_debug/
 sniffed.pcap
 
 .vscode
+
+conf.ini
+CICIDS2017_wisdom.txt
+wisdom.txt
