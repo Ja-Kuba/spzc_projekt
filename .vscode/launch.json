@@ -28,6 +28,15 @@
             "console": "integratedTerminal",
             "args": ["conf.ini"],
             "justMyCode": true
+        },
+        {
+            "name": "test_CICIDS",
+            "type": "python",
+            "request": "launch",
+            "program": "test_cicids2017.py",
+            "console": "integratedTerminal",
+            "args": ["conf.ini"],
+            "justMyCode": true
         }
     ]
 }

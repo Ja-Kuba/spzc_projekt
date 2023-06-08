@@ -8,7 +8,10 @@ from scapy.layers.inet import IP, TCP
 class TRWProcessor(PacketProcessor):
     def __init__(self, conf:dict,  *args, **kwargs):
         self.conf = conf
-        self.oracle = NetworkOracle(self.conf['orcale_source'])
+        self.oracle = NetworkOracle(
+            wisdom_source=self.conf['orcale_source'],
+            local_network = conf['local_network']
+        )
         self.trw = TRW(
             Pd=self.conf['Pd'],
             Pf=self.conf['Pf'],
@@ -22,6 +25,7 @@ class TRWProcessor(PacketProcessor):
     #just IPv4 support for now
     def processPacket(self, packet):
         if not packet['TCP'].flags == 0x02 or not IP in packet:
+        #if not IP in packet:
             return
         
         print(f"CHECK: {packet}; {packet.flags}")
@@ -51,3 +55,4 @@ class TRWProcessor(PacketProcessor):
 
     
 
+00000

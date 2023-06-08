@@ -5,14 +5,14 @@ import ipaddress
 # within local network tells if connection may be succesful
 # Solution requires that list must be updated along wih network modifications 
 class NetworkOracle:
-    def __init__(self, wisdom_source:str='wisdom.txt', localNetwork='192.168.1.0/24') -> None:
+    def __init__(self, wisdom_source:str='wisdom.txt', local_network='192.168.1.0/24') -> None:
         self.wisdom_source = wisdom_source
-        self.localNetwork = localNetwork
+        self.local_network = local_network
         self.wisdom = set()
 
         
     def ifLocalDest(self, ip_dst):
-        return ipaddress.ip_address(ip_dst) in ipaddress.ip_network(self.localNetwork)
+        return ipaddress.ip_address(ip_dst) in ipaddress.ip_network(self.local_network)
     
     def loadWisdom(self):
         try:

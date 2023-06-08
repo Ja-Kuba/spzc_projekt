@@ -28,8 +28,11 @@ class TRW:
         self.n0 = (1 - Pd) / (1 - Pf)
         self.n1 = Pd / Pf
 
+        self.f = open("detected.txt", 'w', encoding='utf-8')
 
-    
+    def __del__(self):
+        self.f.close()
+
     def loadStatsFromFile(self, filepath):
         raise NotImplementedError('TO DO...')
 
@@ -71,6 +74,9 @@ class TRW:
     def updateStatus(self, hd:RemoteHostData):
         if hd.conn_num >= 4:
             if hd.Ls >= self.n1:
+                if hd.Ss != SCANNER:
+                    self.f.write(f'DETECTED: {hd.ip_addr}\n')
+                    self.f.flush()
                 hd.Ss = SCANNER
                 print(f'SCANNER DETECTED: {hd.ip_addr}')
             elif hd.Ls <= self.n0:

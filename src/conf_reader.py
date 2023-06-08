@@ -23,12 +23,14 @@ class ConfReader:
             trw_conf['theta0'] =  float(conf.get('TRW_PROCESSOR', 'theta0'))
             trw_conf['theta1'] =  float(conf.get('TRW_PROCESSOR', 'theta1'))
             trw_conf['orcale_source'] =  str(conf.get('TRW_PROCESSOR', 'orcale_source'))
+            trw_conf['local_network'] =  str(conf.get('TRW_PROCESSOR', 'local_network'))
         
             return sniffer_conf, trw_conf
 
         except (NoOptionError, NoSectionError) as e:
             raise KeyError(f'Invalid ini "{ini_path}": {e}')
         
+
 
 
 

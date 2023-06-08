@@ -162,3 +162,5 @@ sniffed.pcap
 .vscode
 CICIDS2017_wisdom.txt
 wisdom.txt
+local_wisdom.txt
+detected.txt
