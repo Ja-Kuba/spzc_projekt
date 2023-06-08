@@ -19,6 +19,15 @@
             "program": "src\\sniffer.py",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "Main",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "args": ["conf.ini"],
+            "justMyCode": true
         }
     ]
 }

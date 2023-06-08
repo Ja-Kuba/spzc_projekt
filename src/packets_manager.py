@@ -3,7 +3,7 @@ import scapy.all as scapy
 from scapy.layers.inet import TCP, UDP
 
 class PacketsManager:
-    def __init__(self, filter_arg) -> None:
+    def __init__(self, filter_arg):
         #in Berkeley Packet Filter notation
         self._filter = filter_arg 
         
@@ -25,15 +25,15 @@ class PacketsManager:
 
 
 class PacketsManagerTcpUdp(PacketsManager):
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, trw_conf:dict, *args, **kwargs):
         kwargs['filter_arg'] = 'tcp or udp'
         super().__init__(*args, **kwargs)
         self.recorded_traffic = []
         
-        self.initPacketProcessors()
+        self.initPacketProcessors(trw_conf)
 
-    def initPacketProcessors(self):
-        self.dev_proc = TRWProcessor()
+    def initPacketProcessors(self, trw_conf):
+        self.dev_proc = TRWProcessor(conf=trw_conf)
         
         
     def __del__(self):

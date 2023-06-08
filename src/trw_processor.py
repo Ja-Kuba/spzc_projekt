@@ -6,13 +6,14 @@ from scapy.layers.inet import IP, TCP
 
 #-----------------------------------------------------
 class TRWProcessor(PacketProcessor):
-    def __init__(self, *args, **kwargs) -> None:
-        self.oracle = NetworkOracle()
+    def __init__(self, conf:dict,  *args, **kwargs):
+        self.conf = conf
+        self.oracle = NetworkOracle(self.conf['orcale_source'])
         self.trw = TRW(
-            Pd = 0.99,
-            Pf = 0.01,
-            theta0 = 0.8,
-            theta1 = 0.2,
+            Pd=self.conf['Pd'],
+            Pf=self.conf['Pf'],
+            theta0=self.conf['theta0'],
+            theta1=self.conf['theta1'],
         )
         super().__init__(*args, **kwargs)       
         self.name= "TRWProcessor"

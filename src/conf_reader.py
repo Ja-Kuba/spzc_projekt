@@ -1,32 +1,34 @@
-from configparser import ConfigParser
+from configparser import ConfigParser, NoOptionError, NoSectionError
 import os.path
 
 class ConfReader:
     
-    def __init__(self, ini_path):
-        self.db_connstr = ''
-        self.host_name = ''
-        self.__readConf(ini_path)
+    def __init__(self):
+        pass
 
-        self.printConf()
-
-    def __readConf(self, ini_path):
+    def readConf(self, ini_path):
         if not os.path.isfile(ini_path):
-             exit(f'Ini file: \'{ini_path}\' does NOT exist')
+            raise FileNotFoundError(f'Ini file: \'{ini_path}\' does NOT exist')
         
+        sniffer_conf = dict()
+        trw_conf = dict()
+
         conf = ConfigParser()
         conf.read(ini_path)
         try:
-            self.sniffer_conf['max_packets'] =  conf.get('SNIFFER', 'max_packets')
+            sniffer_conf['max_packets'] =  int(conf.get('SNIFFER', 'max_packets'))
    
-            self.trw_conf['Pd'] =  conf.get('TRW_PROCESSOR', 'Pd')
-            self.trw_conf['Pf'] =  conf.get('TRW_PROCESSOR', 'Pf')
-            self.trw_conf['theta0'] =  conf.get('TRW_PROCESSOR', 'theta0')
-            self.trw_conf['theta1'] =  conf.get('TRW_PROCESSOR', 'theta1')
-            self.trw_conf['orcale_source'] =  conf.get('TRW_PROCESSOR', 'orcale_source')
+            trw_conf['Pd'] =  float(conf.get('TRW_PROCESSOR', 'Pd'))
+            trw_conf['Pf'] =  float(conf.get('TRW_PROCESSOR', 'Pf'))
+            trw_conf['theta0'] =  float(conf.get('TRW_PROCESSOR', 'theta0'))
+            trw_conf['theta1'] =  float(conf.get('TRW_PROCESSOR', 'theta1'))
+            trw_conf['orcale_source'] =  str(conf.get('TRW_PROCESSOR', 'orcale_source'))
         
-        except Exception as e:
-            exit('ini error: ' + str(e))
+            return sniffer_conf, trw_conf
+
+        except (NoOptionError, NoSectionError) as e:
+            raise KeyError(f'Invalid ini "{ini_path}": {e}')
+        
 
 
 
