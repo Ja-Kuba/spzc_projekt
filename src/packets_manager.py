@@ -1,6 +1,7 @@
-from packet_processor import PacketProcessor, DevProcessor
-
-
+from packet_processor import PacketProcessor
+from trw_processor import TRWProcessor
+import scapy.all as scapy
+from scapy.layers.inet import IP, TCP, UDP
 
 class PacketsManager:
     def __init__(self, filter_arg) -> None:
@@ -29,9 +30,10 @@ class PacketsManagerTcpUdp(PacketsManager):
         kwargs['filter_arg'] = 'tcp or udp'
         super().__init__(*args, **kwargs)
         self.initPacketProcessors()
+        self.recorded_traffic = []
 
     def initPacketProcessors(self):
-        self.dev_proc = DevProcessor()
+        self.dev_proc = TRWProcessor()
         
         
     def __del__(self):
@@ -41,9 +43,24 @@ class PacketsManagerTcpUdp(PacketsManager):
 
 
     def manage(self, packet):
-        self.dev_proc.pushPackets([packet])
+        if packet.haslayer(TCP):
+            self.dev_proc.onPacket(packet)
+            self.recorded_traffic.append(packet)
+    
+        elif packet.haslayer(UDP):
+            pass
+    
 
-    
-    
+
     def stop(self):
         self.dev_proc.stop()
+
+    
+    def saveToPcap(self):
+        scapy.wrpcap('sniffed.pcap', self.recorded_traffic, append=False)
+
+
+    def printPacket(self, packet):
+        print('-----------------------')
+        print("1: ",packet)
+        print("2: ",packet.summary)

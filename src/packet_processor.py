@@ -1,16 +1,17 @@
 from abc import ABC, abstractmethod
 from scapy.layers.l2 import Ether
 import scapy.all as scapy
+from scapy.layers.inet6 import IPv6
 
 from threading import Thread, Event
 from queue import Queue
 from time import sleep
 
 
+
 # Base interface for processor
 class PacketProcessor():
     def __init__(self) -> None:
-        super().__init__()
         self.name= "BASE_PROCESSOR"
         self.run = True
         self.queue = Queue()
@@ -25,16 +26,12 @@ class PacketProcessor():
             raise AssertionError("Thread not running")
     
 
+    def onPacket(self, packet:Ether):
+        self.pushPacket(packet)
 
-    def pushPackets(self, packets:list):
+
+    def pushPacket(self, packets:Ether):
         self.queue.put(packets)
-
-
-    def process(self, packets:list):
-        self.pushPackets(packets)
-        
-
-
 
 
     def stop(self):
@@ -54,9 +51,8 @@ class PacketProcessor():
     #
     #  Thread functions should not be called from outside
     #
-    def processJob(self, job):
-            for p in job:
-                print(f"P: {p}")
+    def processPacket(self, packet):
+        print(f"P: {packet}")
 
 
     def __threadLoop(self, queue):
@@ -64,37 +60,9 @@ class PacketProcessor():
             if queue.empty():
                 sleep(1)
                 continue
-            job = queue.get()
-            self.processJob(job)
+            packet = queue.get()
+            self.processPacket(packet)
         
         print(f"{self.name} THREAD STOPPED")
 
 
-
-#-----------------------------------------------------
-# Dev processor
-class DevProcessor(PacketProcessor):
-    def __init__(self) -> None:
-        super().__init__()
-        
-
-    def process(self, packet:Ether):
-        #self.printPacket(packet)
-        #self.saveToPcap(packet)
-        pass
-    
-    
-    def processJob(self, job):
-        super().processJob(job)
-                  
-
-
-    def saveToPcap(self,packets):
-        scapy.wrpcap('sniffed.pcap', packets, append=True)
-
-
-    def printPacket(self, packet):
-        print('-----------------------')
-        print("1: ",packet)
-        print("2: ",packet.summary)
-        print("3: ",packet[Ether].src)
