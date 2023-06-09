@@ -32,7 +32,7 @@ class TRW:
         self.n1 = Pd / Pf
 
         self.status_file = status_file
-        self.f = open(detected_file, 'w', encoding='utf-8')
+        self.f = open(detected_file, 'a', encoding='utf-8')
         self.updates_cnt = 0 
 
     def __del__(self):
