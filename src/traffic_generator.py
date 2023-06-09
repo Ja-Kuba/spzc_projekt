@@ -1,16 +1,9 @@
-
-
-class TrafficGenerator():
-    def __init__(self) -> None:
+class TrafficGenerator:
+    def __init__(self):
         pass
 
-
-
-
-    def readPcap(self):
+    def read_pcap(self):
         pass
-
-
 
     def generate(self):
         pass

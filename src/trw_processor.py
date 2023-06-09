@@ -4,13 +4,12 @@ from src.trw import TRW
 from scapy.layers.inet import IP, TCP
 
 
-#-----------------------------------------------------
 class TRWProcessor(PacketProcessor):
-    def __init__(self, conf:dict,  *args, **kwargs):
+    def __init__(self, conf: dict):
         self.conf = conf
         self.oracle = NetworkOracle(
-            wisdom_source=self.conf['orcale_source'],
-            local_network = conf['local_network']
+            wisdom_source=self.conf['oracle_source'],
+            local_network=conf['local_network']
         )
         self.trw = TRW(
             Pd=self.conf['Pd'],
@@ -18,16 +17,14 @@ class TRWProcessor(PacketProcessor):
             theta0=self.conf['theta0'],
             theta1=self.conf['theta1'],
         )
-        super().__init__(*args, **kwargs)       
-        self.name= "TRWProcessor"
+        super().__init__()
+        self.name = "TRWProcessor"
 
-    
-    #just IPv4 support for now
-    def processPacket(self, packet):
-        if not packet['TCP'].flags == 0x02 or not IP in packet:
-        #if not IP in packet:
+    # just IPv4 support for now
+    def process_packet(self, packet):
+        if not packet['TCP'].flags == 0x02 or IP not in packet:
             return
-        
+
         print(f"CHECK: {packet}; {packet.flags}")
         dst_port = packet[TCP].dport
         if IP in packet:
@@ -37,22 +34,13 @@ class TRWProcessor(PacketProcessor):
         #     ip_dst = packet[IPv6].dst
         #     ip_src = packet[IPv6].src
 
-        #we want to check only if local network is being scan
-        if not self.oracle.ifLocalDest(ip_dst):
+        # we want to check only if local network is being scanned
+        if not self.oracle.if_local_dest(ip_dst):
             return
 
-        self.proccessConection(ip_src, ip_dst, dst_port)
+        self.process_connection(ip_src, ip_dst, dst_port)
 
-
-
-    def proccessConection(self, ip_src, ip_dst, dst_port):
-        #if connection may be succesful based on Oracle wisedom
-        succesful = self.oracle.ask(ip_dst, dst_port)
-        self.trw.put(succesful, ip_src, ip_dst)
-
-    
-
-
-    
-
-00000
+    def process_connection(self, ip_src, ip_dst, dst_port):
+        # if connection may be successful based on Oracle wisdom
+        successful = self.oracle.ask(ip_dst, dst_port)
+        self.trw.put(successful, ip_src, ip_dst)

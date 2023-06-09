@@ -22,6 +22,3 @@ if __name__ == "__main__":
     except KeyError as e:
         print(f"ERROR: {e}")
         exit()
-
-
-

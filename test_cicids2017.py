@@ -3,32 +3,33 @@ from scapy.layers.inet import IP, TCP
 from scapy.packet import Packet
 from src.conf_reader import ConfReader
 from csv import reader
-import tqdm
 
 
-def createPacket(row):
+def create_packet(line):
     # print(row)
     # for i, r in enumerate(row):
-        # print(f"{i}: {r}")
-    protocol = row[5]
-    if protocol != "6": 
+    # print(f"{i}: {r}")
+    protocol = line[5]
+    if protocol != "6":
         return None
-    
-    SYN = row[50]
-    ACK = row[53]
-    sip = row[1]
-    dip = row[3]
-    sport = row[2]
-    dport = row[4]
+
+    SYN = line[50]
+    ACK = line[53]
+    sip = line[1]
+    dip = line[3]
+    sport = line[2]
+    dport = line[4]
     flags = 0
 
-    if SYN == "1": flags +=0x02
-    if ACK == "1": flags +=0x10
-    
-    return makePacket(sip, dip, int(sport), int(dport), flags)
+    if SYN == "1":
+        flags += 0x02
+    if ACK == "1":
+        flags += 0x10
+
+    return make_packet(sip, dip, int(sport), int(dport), flags)
 
 
-def makePacket(sip, dip, sport, dport, tcp_flags):
+def make_packet(sip, dip, sport, dport, tcp_flags):
     ip = IP(dst=dip, src=sip)
     ports = TCP(sport=sport, dport=dport, flags=tcp_flags)
     packet: Packet = ip / ports
@@ -36,21 +37,22 @@ def makePacket(sip, dip, sport, dport, tcp_flags):
     return packet
 
 
-def maketraffic(line):
-    packet = createPacket(line)
+def make_traffic(line):
+    packet = create_packet(line)
     if packet:
-        p.manage(packet)                
-            
+        p.manage(packet)
 
-def showStats(row):
-    SYN = row[50]
-    ACK = row[53]
-    label = row[-1]
+
+def show_stats(line):
+    SYN = line[50]
+    ACK = line[53]
+    label = line[-1]
     if label == 'PortScan' and SYN == '1':
         print(f"{label} ACK: {ACK}, SYN: {SYN}")
 
+
 if __name__ == '__main__':
-    c =  ConfReader()
+    c = ConfReader()
     _, trw_conf = c.readConf('conf_CICIDS.ini')
     p = PacketsManagerTcpUdp(trw_conf=trw_conf)
 
@@ -59,10 +61,7 @@ if __name__ == '__main__':
     with open(data_filepath) as f:
         csv_r = reader(f)
         for row in csv_r:
-            maketraffic(row)
-            #showStats(row)
+            make_traffic(row)
+            # showStats(row)
 
     p.stop()
-
-
-
