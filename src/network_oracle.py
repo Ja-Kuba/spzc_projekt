@@ -7,18 +7,17 @@ import ipaddress
 class NetworkOracle:
     def __init__(self, wisdom_source: str = 'wisdom.txt', local_network='192.168.1.0/24'):
         self.wisdom_source = wisdom_source
-        self.localNetwork = local_network
+        self.local_network = local_network
         self.wisdom = set()
 
     def if_local_dest(self, ip_dst):
-        return ipaddress.ip_address(ip_dst) in ipaddress.ip_network(self.localNetwork)
+        return ipaddress.ip_address(ip_dst) in ipaddress.ip_network(self.local_network)
 
     def load_wisdom(self):
         try:
             with open(self.wisdom_source, 'r', encoding='utf-8') as f:
                 for line in f:
                     self.add_prophecy(line.strip())
-
         except FileNotFoundError:
             raise FileNotFoundError(f'Oracle wisdom source file "{self.wisdom_source}" not found')
 

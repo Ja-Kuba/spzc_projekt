@@ -21,13 +21,18 @@ class RemoteHostData:
 class TRW:
     def __init__(self, Pd, Pf, theta0, theta1):
         self.hosts_stats: dict[RemoteHostData] = dict()
-        self.Pd = Pd
+        self.Pd = Pd 
         self.Pf = Pf
         self.theta0 = theta0
         self.theta1 = theta1
-
+        
         self.n0 = (1 - Pd) / (1 - Pf)
         self.n1 = Pd / Pf
+
+        self.f = open("detected.txt", 'w', encoding='utf-8')
+
+    def __del__(self):
+        self.f.close()
 
     def load_stats_from_file(self, filepath):
         raise NotImplementedError('TO DO...')
@@ -49,7 +54,6 @@ class TRW:
         if ip_dst in hd.Ds:
             # there already was first connection to that localhost
             return
-
         hd.Ds.add(ip_dst)
         hd.conn_num += 1
         yi = (0 if successful else 1)
@@ -67,6 +71,9 @@ class TRW:
     def update_status(self, hd: RemoteHostData):
         if hd.conn_num >= 4:
             if hd.Ls >= self.n1:
+                if hd.Ss != SCANNER:
+                    self.f.write(f'DETECTED: {hd.ip_addr}\n')
+                    self.f.flush()
                 hd.Ss = SCANNER
                 print(f'SCANNER DETECTED: {hd.ip_addr}')
             elif hd.Ls <= self.n0:

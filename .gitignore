@@ -159,5 +159,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 sniffed.pcap
-
 .vscode
+CICIDS2017_wisdom.txt
+wisdom.txt
+local_wisdom.txt
+detected.txt
+.idea

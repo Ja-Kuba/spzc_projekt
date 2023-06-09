@@ -18,7 +18,8 @@ class Sniffer:
             count=max_packets,  # just for debugging
         )
 
-    def get_ifaces_list(self):
+    @staticmethod
+    def get_ifaces_list():
         interfaces = scapy.get_if_list()
 
         return interfaces
