@@ -5,7 +5,7 @@ from src.conf_reader import ConfReader
 from csv import reader
 
 
-def createPacket(row):
+def create_packet(line):
     # print(row)
     # for i, r in enumerate(row):
         # print(f"{i}: {r}")
@@ -28,10 +28,10 @@ def createPacket(row):
         flags += 'A'
 
     
-    return makePacket(sip, dip, int(sport), int(dport), flags)
+    return make_packet(sip, dip, int(sport), int(dport), flags)
 
 
-def makePacket(sip, dip, sport, dport, tcp_flags):
+def make_packet(sip, dip, sport, dport, tcp_flags):
     ip = IP(dst=dip, src=sip)
     ports = TCP(sport=sport, dport=dport, flags=tcp_flags)
     packet: Packet = ip / ports
@@ -39,21 +39,22 @@ def makePacket(sip, dip, sport, dport, tcp_flags):
     return packet
 
 
-def maketraffic(line):
-    packet = createPacket(line)
+def make_traffic(line):
+    packet = create_packet(line)
     if packet:
-        p.manage(packet)                
-            
+        p.manage(packet)
 
-def showStats(row):
-    SYN = row[50]
-    ACK = row[53]
-    label = row[-1]
+
+def show_stats(line):
+    SYN = line[50]
+    ACK = line[53]
+    label = line[-1]
     if label == 'PortScan' and SYN == '1':
         print(f"{label} ACK: {ACK}, SYN: {SYN}")
 
+
 if __name__ == '__main__':
-    c =  ConfReader()
+    c = ConfReader()
     _, trw_conf = c.readConf('conf_CICIDS.ini')
     p = PacketsManagerTcpUdp(trw_conf=trw_conf)
 
@@ -64,7 +65,7 @@ if __name__ == '__main__':
         csv_r = reader(f)
         for row in csv_r:
             i +=1
-            maketraffic(row)
+            make_traffic(row)
 
             if i % 5000 == 0 :
                 print(f"{i} packets processed")
@@ -73,6 +74,3 @@ if __name__ == '__main__':
     
     print("DONE")
     p.stop()
-
-
-

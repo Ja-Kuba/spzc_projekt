@@ -4,13 +4,12 @@ from src.trw import TRW, TRWPorts
 from scapy.layers.inet import IP, TCP
 
 
-#-----------------------------------------------------
 class TRWProcessor(PacketProcessor):
-    def __init__(self, conf:dict,  *args, **kwargs):
+    def __init__(self, conf: dict):
         self.conf = conf
         self.oracle = NetworkOracle(
-            wisdom_source=self.conf['orcale_source'],
-            local_network = conf['local_network']
+            wisdom_source=self.conf['oracle_source'],
+            local_network=conf['local_network']
         )
         self.trw = TRW(
             Pd=self.conf['Pd'],
@@ -25,7 +24,7 @@ class TRWProcessor(PacketProcessor):
             theta1=self.conf['theta1'],
             status_file='status_ports.log',
         )
-        super().__init__(*args, **kwargs)       
+        super().__init__()       
         self.name= "TRWProcessor"
 
     def stop(self):
@@ -33,7 +32,7 @@ class TRWProcessor(PacketProcessor):
         self.trw.storeStatsInFile()
 
     #just IPv4 support for now
-    def processPacket(self, packet):
+    def process_packet(self, packet):
         if not packet['TCP'].flags == 0x02 or not IP in packet:
         #if not IP in packet:
             return
@@ -47,15 +46,15 @@ class TRWProcessor(PacketProcessor):
         #     ip_dst = packet[IPv6].dst
         #     ip_src = packet[IPv6].src
 
-        #we want to check only if local network is being scan
-        if not self.oracle.ifLocalDest(ip_dst):
+        # we want to check only if local network is being scanned
+        if not self.oracle.if_local_dest(ip_dst):
             return
 
-        self.proccessConection(ip_src, ip_dst, dst_port)
+        self.process_connection(ip_src, ip_dst, dst_port)
 
 
 
-    def proccessConection(self, ip_src, ip_dst, dst_port):
+    def process_connection(self, ip_src, ip_dst, dst_port):
         #if connection may be succesful based on Oracle wisedom
         succesful = self.oracle.ask(ip_dst, dst_port)
         self.trw.put(succesful, ip_src, ip_dst)

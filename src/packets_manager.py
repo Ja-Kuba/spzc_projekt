@@ -2,11 +2,11 @@ from src.trw_processor import TRWProcessor
 import scapy.all as scapy
 from scapy.layers.inet import TCP, UDP
 
+
 class PacketsManager:
     def __init__(self, filter_arg):
-        #in Berkeley Packet Filter notation
-        self._filter = filter_arg 
-        
+        # in Berkeley Packet Filter notation
+        self._filter = filter_arg
 
     @property
     def filter(self):
@@ -18,50 +18,42 @@ class PacketsManager:
 
     def manage(self, packet):
         pass
-    
+
     def stop(self):
         pass
-        
 
 
 class PacketsManagerTcpUdp(PacketsManager):
-    def __init__(self, trw_conf:dict, *args, **kwargs):
+    def __init__(self, trw_conf: dict, *args, **kwargs):
         kwargs['filter_arg'] = 'tcp or udp'
         super().__init__(*args, **kwargs)
         self.recorded_traffic = []
-        
-        self.initPacketProcessors(trw_conf)
 
-    def initPacketProcessors(self, trw_conf):
+        self.init_packet_processors(trw_conf)
+
+    def init_packet_processors(self, trw_conf):
         self.dev_proc = TRWProcessor(conf=trw_conf)
-        
-        
+
     def __del__(self):
         self.dev_proc.stop()
-
-
-
 
     def manage(self, packet):
         if packet.haslayer(TCP):
             #print(f"p: {packet}")
-            self.dev_proc.onPacket(packet)
+            self.dev_proc.on_packet(packet)
             self.recorded_traffic.append(packet)
-    
+
         elif packet.haslayer(UDP):
             pass
-    
-
 
     def stop(self):
         self.dev_proc.stop()
 
-    
-    def saveToPcap(self):
+    def save_to_pcap(self):
         scapy.wrpcap('sniffed.pcap', self.recorded_traffic, append=False)
 
-
-    def printPacket(self, packet):
+    @staticmethod
+    def print_packet(packet):
         print('-----------------------')
-        print("1: ",packet)
-        print("2: ",packet.summary)
+        print("1: ", packet)
+        print("2: ", packet.summary)
