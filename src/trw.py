@@ -65,7 +65,6 @@ class TRW:
         if ip_dst in hd.Ds:
             # there already was first connection to that localhost
             return
-        
         hd.Ds.add(ip_dst)
         hd.conn_num+=1
         yi = (0 if successful else 1)

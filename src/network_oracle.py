@@ -31,4 +31,3 @@ class NetworkOracle:
         #print(f"ask: {dest}")
         
         return (True if dest in self.wisdom else False)
-
