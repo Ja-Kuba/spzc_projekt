@@ -1,6 +1,6 @@
 from src.packet_processor import PacketProcessor
 from src.network_oracle import NetworkOracle
-from src.trw import TRW
+from src.trw import TRW, TRWPorts
 from scapy.layers.inet import IP, TCP
 
 
@@ -18,18 +18,28 @@ class TRWProcessor(PacketProcessor):
             theta0=self.conf['theta0'],
             theta1=self.conf['theta1'],
         )
+        self.trw_ports = TRWPorts(
+            Pd=self.conf['Pd'],
+            Pf=self.conf['Pf'],
+            theta0=self.conf['theta0'],
+            theta1=self.conf['theta1'],
+            status_file='status_ports.log',
+        )
         super().__init__(*args, **kwargs)       
         self.name= "TRWProcessor"
 
-    
+    def stop(self):
+        super().stop()
+        self.trw.storeStatsInFile()
+
     #just IPv4 support for now
     def processPacket(self, packet):
         if not packet['TCP'].flags == 0x02 or not IP in packet:
         #if not IP in packet:
             return
         
-        print(f"CHECK: {packet}; {packet.flags}")
-        dst_port = packet[TCP].dport
+        #print(f"CHECK: {packet}; {packet.flags}")
+        dst_port = int(packet[TCP].dport)
         if IP in packet:
             ip_src = packet[IP].src
             ip_dst = packet[IP].dst
@@ -49,10 +59,5 @@ class TRWProcessor(PacketProcessor):
         #if connection may be succesful based on Oracle wisedom
         succesful = self.oracle.ask(ip_dst, dst_port)
         self.trw.put(succesful, ip_src, ip_dst)
+        self.trw_ports.put(succesful, ip_src, ip_dst, dst_port)
 
-    
-
-
-    
-
-00000

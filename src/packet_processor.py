@@ -55,7 +55,7 @@ class PacketProcessor():
     def __threadLoop(self, queue):
         while self.run:
             if queue.empty():
-                sleep(1)
+                #sleep(.1)
                 continue
             packet = queue.get()
             self.processPacket(packet)

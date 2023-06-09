@@ -44,6 +44,7 @@ class PacketsManagerTcpUdp(PacketsManager):
 
     def manage(self, packet):
         if packet.haslayer(TCP):
+            #print(f"p: {packet}")
             self.dev_proc.onPacket(packet)
             self.recorded_traffic.append(packet)
     

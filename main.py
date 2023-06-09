@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
         s.sniff(max_packets=sniffer_conf["max_packets"])
         s.stop()
-        p.save_to_pcap()
+        p.saveToPcap()
 
     except KeyError as e:
         print(f"ERROR: {e}")
