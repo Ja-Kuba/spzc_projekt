@@ -39,9 +39,10 @@ def make_packet(sip, dip, sport, dport, tcp_flags):
     return packet
 
 
-def make_traffic(line):
+def make_traffic(line, i):
     packet = create_packet(line)
     if packet:
+        #print(f'{i}. send')
         p.manage(packet)
 
 
@@ -59,15 +60,16 @@ if __name__ == '__main__':
     p = PacketsManagerTcpUdp(trw_conf=trw_conf)
 
     data_filepath = 'C:\\Projekty\\SPZC\\CICIDS2017\\raw_traffic\\raw_tcp_flags_syn_only.csv'
+    #data_filepath = 'C:\\Projekty\\SPZC\\CICIDS2017\\raw_traffic\\raw_tcp_test.csv'
 
     i = 0
     with open(data_filepath) as f:
         csv_r = reader(f)
         for row in csv_r:
             i +=1
-            make_traffic(row)
+            make_traffic(row, i)
 
-            if i % 5000 == 0 :
+            if i % 500 == 0 :
                 print(f"{i} packets processed")
                 #break
             #showStats(row)

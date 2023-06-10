@@ -28,7 +28,7 @@ class TRWProcessor(PacketProcessor):
         super().__init__()       
         self.name= "TRWProcessor"
         self.stats_dump_cnt = 0
-        self.stats_dump_period = 4
+        self.stats_dump_period = self.conf['stats_dump_period']
 
     def __del__(self):
         #in super __del__ thread is joined!!!
@@ -40,7 +40,7 @@ class TRWProcessor(PacketProcessor):
         self.trw_ports.storeStatsInFile()
 
     def on_packet(self, packet: Ether):
-        self.stats_dump_cnt += 0
+        self.stats_dump_cnt += 1
         if self.stats_dump_cnt % self.stats_dump_period == 0:
             self.stats_dump_cnt=0
             self.dumpStats()

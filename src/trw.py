@@ -109,10 +109,10 @@ class TRW:
             else:
                 hd.Ss = PENDING
             
-            if hd.Ss != curr_state:
+            if hd.Ss == SCANNER and hd.Ss != curr_state:
                 time_Str = f"{datetime.datetime.now()} "
                 with open(self.detected_file, 'a', encoding='utf-8') as f:
-                    f.write(f'[{time_Str}] STATE_CHANGE: {curr_state} => {hd.Ss}\n{hd.stats_str()}\n-------\n')
+                    f.write(f'[{time_Str}] SCANNER DETECTED!!!\n{hd.stats_str()}\n-------\n')
                 
 
 

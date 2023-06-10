@@ -25,6 +25,7 @@ class ConfReader:
             trw_conf['theta1'] = float(conf.get('TRW_PROCESSOR', 'theta1'))
             trw_conf['oracle_source'] = str(conf.get('TRW_PROCESSOR', 'oracle_source'))
             trw_conf['local_network'] = str(conf.get('TRW_PROCESSOR', 'local_network'))
+            trw_conf['stats_dump_period'] = int(conf.get('TRW_PROCESSOR', 'stats_dump_period'))
 
             return sniffer_conf, trw_conf
 
