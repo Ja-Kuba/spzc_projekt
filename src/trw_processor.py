@@ -33,6 +33,10 @@ class TRWProcessor(PacketProcessor):
     def __del__(self):
         #in super __del__ thread is joined!!!
         super().__del__()
+        #self.dumpStats()
+
+    def stop(self):
+        super().stop()
         self.dumpStats()
 
     def dumpStats(self):
