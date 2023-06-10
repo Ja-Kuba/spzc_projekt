@@ -4,19 +4,29 @@ import datetime
 # Jaeyeon Jung, Vern Paxson, Arthur W. Berger, and Hari Balakrishnan
 # "Fast Portscan Detection Using Sequential Hypothesis Testing"
 
-PENDING = 0
-BENIGN = 1
-SCANNER = 2
+PENDING ='PENDING' 
+BENIGN = 'BENIGN'
+SCANNER = 'SCANNER'
 
 
 @dataclass
 class RemoteHostData:
     ip_addr:str
     Ds:set = field(default_factory=set)         #set of ip's to which host has connected to
-    Ss:int = PENDING    #decision_state
+    Ss:str = PENDING    #decision_state
     Ls:float = 1.          #likelihood ratio
     conn_num:str = 0
     conn_fail:int = 0
+
+    def stats_str(self):
+        str = ''
+        str+=f'{self.ip_addr}\n'
+        str+=f'\tSs: {self.Ss}\n'
+        str+=f'\tLs: {self.Ls}\n'
+        str+=f'\tconn_num: {self.conn_num}\n'
+        str+=f'\tconn_fail: {self.conn_fail}'
+        return str
+
 
 
 class TRW:
@@ -32,23 +42,22 @@ class TRW:
         self.n1 = Pd / Pf
 
         self.status_file = status_file
-        self.f = open(detected_file, 'a', encoding='utf-8')
+        self.detected_file = detected_file
+
         self.updates_cnt = 0 
 
     def __del__(self):
-        self.f.close()
-
+        pass
+    
     def load_stats_from_file(self, filepath):
+
         raise NotImplementedError('TO DO...')
+    
 
     def storeStatsInFile(self):
         with open(self.status_file, 'w', encoding="utf-8") as f:
             for _, hd in self.hosts_stats.items():
-                f.write(f'{hd.ip_addr}\n')
-                f.write(f'\tSs: {hd.Ss}\n')
-                f.write(f'\tLs: {hd.Ls}\n')
-                f.write(f'\tconn_num: {hd.conn_num}\n')
-                f.write(f'\tconn_fail: {hd.conn_fail}\n')
+                f.write(f'{hd.stats_str()}\n')
 
 
     def put(self, successful, ip_src, ip_dst):
@@ -75,8 +84,8 @@ class TRW:
 
         self.updates_cnt +=1
         if self.updates_cnt %1 == 0:
-            print("__STORE STATE_PORTS")
-            self.storeStatsInFile()
+            #print("__STORE STATE_PORTS")
+            #self.storeStatsInFile()
             self.updates_cnt=0
 
 
@@ -90,18 +99,21 @@ class TRW:
 
     def update_status(self, hd: RemoteHostData):
         if hd.conn_num >= 4:
+            curr_state = hd.Ss
             if hd.Ls >= self.n1:
-                if hd.Ss != SCANNER:
-                    time_Str = f"{datetime.datetime.now()} "
-                    self.f.write(f'[{time_Str}] DETECTED: {hd.ip_addr} conn_cnt={hd.conn_num} conn_failed={hd.conn_fail}\n')
-                    self.f.flush()
                 hd.Ss = SCANNER
-                print(f'SCANNER DETECTED: {hd.ip_addr}')
+                #print(f'SCANNER DETECTED: {hd.ip_addr}')
             elif hd.Ls <= self.n0:
                 hd.Ss = BENIGN
-                print(f'BENIGN MARKED: {hd.ip_addr}')
+                #print(f'BENIGN MARKED: {hd.ip_addr}')
             else:
                 hd.Ss = PENDING
+            
+            if hd.Ss != curr_state:
+                time_Str = f"{datetime.datetime.now()} "
+                with open(self.detected_file, 'a', encoding='utf-8') as f:
+                    f.write(f'[{time_Str}] STATE_CHANGE: {curr_state} => {hd.Ss}\n{hd.stats_str()}\n-------\n')
+                
 
 
 

@@ -1,3 +1,4 @@
+from scapy.layers.l2 import Ether
 from src.packet_processor import PacketProcessor
 from src.network_oracle import NetworkOracle
 from src.trw import TRW, TRWPorts
@@ -26,10 +27,25 @@ class TRWProcessor(PacketProcessor):
         )
         super().__init__()       
         self.name= "TRWProcessor"
+        self.stats_dump_cnt = 0
+        self.stats_dump_period = 4
 
-    def stop(self):
-        super().stop()
+    def __del__(self):
+        #in super __del__ thread is joined!!!
+        super().__del__()
+        self.dumpStats()
+
+    def dumpStats(self):
         self.trw.storeStatsInFile()
+        self.trw_ports.storeStatsInFile()
+
+    def on_packet(self, packet: Ether):
+        self.stats_dump_cnt += 0
+        if self.stats_dump_cnt % self.stats_dump_period == 0:
+            self.stats_dump_cnt=0
+            self.dumpStats()
+
+        return super().on_packet(packet)
 
     #just IPv4 support for now
     def process_packet(self, packet):

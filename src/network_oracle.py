@@ -10,6 +10,7 @@ class NetworkOracle:
         self.wisdom_source = wisdom_source
         self.local_network = local_network
         self.wisdom = set()
+        self.load_wisdom()
 
     def if_local_dest(self, ip_dst):
         return ipaddress.ip_address(ip_dst) in ipaddress.ip_network(self.local_network)
