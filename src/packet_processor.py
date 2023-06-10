@@ -28,14 +28,16 @@ class PacketProcessor:
 
     def stop(self):
         self.run = False
+        self.thread.join()
 
     def join_thread(self):
         self.thread.join()
         self.thread = None
 
     def run_process_thread(self):
-        self.thread = Thread(target=self.__thread_loop, args=(self.queue,))
-        self.thread.start()
+        thread = Thread(target=self.__thread_loop, args=(self.queue,))
+        thread.start()
+        return thread
 
     #
     #  Thread functions should not be called from outside
