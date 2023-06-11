@@ -35,7 +35,7 @@
             "request": "launch",
             "program": "test_cicids2017.py",
             "console": "integratedTerminal",
-            "args": ["conf.ini"],
+            "args": ["conf_CICIDS2017.ini"],
             "justMyCode": true
         }
     ]

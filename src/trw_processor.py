@@ -30,10 +30,6 @@ class TRWProcessor(PacketProcessor):
         self.stats_dump_cnt = 0
         self.stats_dump_period = self.conf['stats_dump_period']
 
-    def __del__(self):
-        #in super __del__ thread is joined!!!
-        super().__del__()
-        #self.dumpStats()
 
     def stop(self):
         super().stop()
@@ -44,11 +40,6 @@ class TRWProcessor(PacketProcessor):
         self.trw_ports.storeStatsInFile()
 
     def on_packet(self, packet: Ether):
-        self.stats_dump_cnt += 1
-        if self.stats_dump_cnt % self.stats_dump_period == 0:
-            self.stats_dump_cnt=0
-            self.dumpStats()
-
         return super().on_packet(packet)
 
     #just IPv4 support for now
@@ -70,6 +61,11 @@ class TRWProcessor(PacketProcessor):
         if not self.oracle.if_local_dest(ip_dst):
             return
 
+        self.stats_dump_cnt += 1
+        if self.stats_dump_cnt % self.stats_dump_period == 0:
+            self.stats_dump_cnt=0
+            self.dumpStats()
+
         self.process_connection(ip_src, ip_dst, dst_port)
 
 
@@ -77,6 +73,6 @@ class TRWProcessor(PacketProcessor):
     def process_connection(self, ip_src, ip_dst, dst_port):
         #if connection may be succesful based on Oracle wisedom
         succesful = self.oracle.ask(ip_dst, dst_port)
-        self.trw.put(succesful, ip_src, ip_dst)
-        self.trw_ports.put(succesful, ip_src, ip_dst, dst_port)
+        self.trw.put(succesful, str(ip_src), str(ip_dst))
+        self.trw_ports.put(succesful, str(ip_src), str(ip_dst), dst_port)
 

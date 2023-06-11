@@ -24,8 +24,8 @@ class NetworkOracle:
             raise FileNotFoundError(f'Oracle wisdom source file "{self.wisdom_source}" not found')
 
     def add_prophecy(self, prop):
-        # rgx= r'^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}:([0-9]):$'
-        self.wisdom.add(prop)
+        if len(prop)>0 and prop[0] != "#":
+            self.wisdom.add(prop)
 
     def ask(self, ip_dst, dst_port):
         dest = f'{ip_dst}:{dst_port}'

@@ -12,9 +12,6 @@ class PacketProcessor:
         self.queue = Queue()
         self.thread = self.run_process_thread()
 
-    def __del__(self):
-        if self.thread:
-            self.join_thread()
 
     def if_running(self):
         if not self.thread:

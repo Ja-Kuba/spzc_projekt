@@ -34,9 +34,7 @@ class PacketsManagerTcpUdp(PacketsManager):
     def init_packet_processors(self, trw_conf):
         self.dev_proc = TRWProcessor(conf=trw_conf)
 
-    def __del__(self):
-        #self.dev_proc.stop()
-        pass
+
 
     def manage(self, packet):
         if packet.haslayer(TCP):

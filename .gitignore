@@ -165,3 +165,5 @@ wisdom.txt
 local_wisdom.txt
 detected.txt
 .idea
+src/test.py
+raw_tcp_test.csv

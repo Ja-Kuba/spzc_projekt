@@ -1,5 +1,8 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict, is_dataclass
 import datetime
+from json import JSONDecoder, JSONEncoder
+import json
+from os.path import isfile
 # Threshold Random Walk implementation based on:
 # Jaeyeon Jung, Vern Paxson, Arthur W. Berger, and Hari Balakrishnan
 # "Fast Portscan Detection Using Sequential Hypothesis Testing"
@@ -7,6 +10,42 @@ import datetime
 PENDING ='PENDING' 
 BENIGN = 'BENIGN'
 SCANNER = 'SCANNER'
+
+
+class RemoteHostDataJSONEncoder(JSONEncoder):
+        class CustomDict(dict):
+            def __init__(self, o) -> None:
+                if isinstance(o, set):
+                    o = list(o)
+                return super().__init__(o)
+            
+        def default(self, o):
+            if is_dataclass(o):
+                return asdict(o, dict_factory=self.CustomDict)
+            if isinstance(o, set):
+                return list(o)
+
+
+            return super().default(o)
+
+
+class RemoteHostDataJSONDecoder(JSONDecoder):
+        def __init__(self, *args, **kwargs):
+            JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+    
+        
+        def decode(self, o):
+            if isinstance(o, dict) :
+                return RemoteHostData(**o)
+            return super().decode(o)
+        
+        def object_hook(self, dct):
+            if 'Ds' in dct:
+                dct['Ds'] = set(dct['Ds'])
+                dct['Ls'] = float(dct['Ls'])
+                return RemoteHostData(**dct)
+
+            return dct
 
 
 @dataclass
@@ -28,11 +67,14 @@ class RemoteHostData:
         return str
 
 
+    # def store_hist(self):
+    #     with open(f'{self.ip_addr}_logs.log', 'a', encoding='utf-8') as f:
+    #         w = f'{self.Ss}, {self.Ls}, {self.conn_fail}, {self.conn_num}\n'
+    #         f.write(w)
 
 class TRW:
     def __init__(self, Pd, Pf, theta0, theta1, 
                  status_file='status.log', detected_file='detected.log') -> None:
-        self.hosts_stats:dict[RemoteHostData] = dict()
         self.Pd = Pd 
         self.Pf = Pf
         self.theta0 = theta0
@@ -43,21 +85,26 @@ class TRW:
 
         self.status_file = status_file
         self.detected_file = detected_file
+        self.hosts_stats:dict[RemoteHostData] = self.load_stats_from_file()
 
         self.updates_cnt = 0 
+        
 
-    def __del__(self):
-        pass
     
-    def load_stats_from_file(self, filepath):
-
-        raise NotImplementedError('TO DO...')
+    def load_stats_from_file(self):
+        if not isfile(self.status_file):
+            return dict()
+        try:
+            with open(self.status_file, 'r', encoding="utf-8") as f:
+                return (json.loads(f.read(), cls=RemoteHostDataJSONDecoder))
+        except json.decoder.JSONDecodeError as e:
+            print(f'[WARNING]file "{self.status_file}" has invalid format. Init empty status')
+            return dict()
     
 
     def storeStatsInFile(self):
         with open(self.status_file, 'w', encoding="utf-8") as f:
-            for _, hd in self.hosts_stats.items():
-                f.write(f'{hd.stats_str()}\n')
+            f.write(json.dumps(self.hosts_stats, cls=RemoteHostDataJSONEncoder))
 
 
     def put(self, successful, ip_src, ip_dst):
@@ -82,10 +129,10 @@ class TRW:
         if not successful:
             hd.conn_fail+=1
 
+        # hd.store_hist()
+
         self.updates_cnt +=1
         if self.updates_cnt %1 == 0:
-            #print("__STORE STATE_PORTS")
-            #self.storeStatsInFile()
             self.updates_cnt=0
 
 
@@ -102,10 +149,8 @@ class TRW:
             curr_state = hd.Ss
             if hd.Ls >= self.n1:
                 hd.Ss = SCANNER
-                #print(f'SCANNER DETECTED: {hd.ip_addr}')
             elif hd.Ls <= self.n0:
                 hd.Ss = BENIGN
-                #print(f'BENIGN MARKED: {hd.ip_addr}')
             else:
                 hd.Ss = PENDING
             
