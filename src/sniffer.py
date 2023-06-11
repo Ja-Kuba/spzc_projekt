@@ -24,10 +24,10 @@ class Sniffer:
 
         return interfaces
 
-    def print_ifaces(self):
-        ifaces = self.get_ifaces_list()
-        for i in ifaces:
-            print(i)
+    # def print_ifaces(self):
+    #     ifaces = self.get_ifaces_list()
+    #     for i in ifaces:
+    #         print(i)
 
     def stop(self):
         self.manager.stop()

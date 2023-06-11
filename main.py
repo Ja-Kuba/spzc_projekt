@@ -9,15 +9,15 @@ if __name__ == "__main__":
         print("Invalid args: ex. python main.py conf_file.ini")
     
     try:
-        c =  ConfReader()
+        c = ConfReader()
         sniffer_conf, trw_conf = c.read_conf(argv[1])
 
-        p = PacketsManagerTcpUdp(trw_conf = trw_conf)
+        p = PacketsManagerTcpUdp(trw_conf=trw_conf)
         s = Sniffer(p)
 
         s.sniff(max_packets=sniffer_conf["max_packets"])
         s.stop()
-        p.saveToPcap()
+        p.save_to_pcap()
 
     except KeyError as e:
         print(f"ERROR: {e}")

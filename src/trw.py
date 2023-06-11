@@ -47,7 +47,6 @@ class TRW:
         self.updates_cnt = 0
 
     def __del__(self):
-        self.store_stats_in_file()
         pass
 
     def load_stats_from_file(self, filepath):
@@ -58,7 +57,7 @@ class TRW:
             for _, hd in self.hosts_stats.items():
                 f.write(f'{hd.stats_str()}\n')
 
-    def put(self, successful, ip_src, ip_dst):
+    def put(self, successful, ip_src, ip_dst, dport):
         key = ip_src
         if key in self.hosts_stats:
             self.update(self.hosts_stats[key], successful, ip_dst)
@@ -107,9 +106,9 @@ class TRW:
                 hd.Ss = PENDING
 
             if hd.Ss == SCANNER and hd.Ss != curr_state:
-                time_Str = f"{datetime.datetime.now()} "
+                time_str = f"{datetime.datetime.now()} "
                 with open(self.detected_file, 'a', encoding='utf-8') as f:
-                    f.write(f'[{time_Str}] SCANNER DETECTED!!!\n{hd.stats_str()}\n-------\n')
+                    f.write(f'[{time_str}] SCANNER DETECTED!!!\n{hd.stats_str()}\n-------\n')
 
 
 class TRWPorts(TRW):

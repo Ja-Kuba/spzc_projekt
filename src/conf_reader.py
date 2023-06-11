@@ -7,7 +7,8 @@ class ConfReader:
     def __init__(self):
         pass
 
-    def read_conf(self, ini_path):
+    @staticmethod
+    def read_conf(ini_path):
         if not os.path.isfile(ini_path):
             raise FileNotFoundError(f'Ini file: \'{ini_path}\' does NOT exist')
 

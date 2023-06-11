@@ -31,4 +31,4 @@ class NetworkOracle:
         dest = f'{ip_dst}:{dst_port}'
         # print(f"ask: {dest}")
 
-        return (True if dest in self.wisdom else False)
+        return True if dest in self.wisdom else False

@@ -28,10 +28,6 @@ class PacketsManagerTcpUdp(PacketsManager):
         kwargs['filter_arg'] = 'tcp or udp'
         super().__init__(*args, **kwargs)
         self.recorded_traffic = []
-
-        self.init_packet_processors(trw_conf)
-
-    def init_packet_processors(self, trw_conf):
         self.dev_proc = TRWProcessor(conf=trw_conf)
 
     def __del__(self):
@@ -40,7 +36,7 @@ class PacketsManagerTcpUdp(PacketsManager):
 
     def manage(self, packet):
         if packet.haslayer(TCP):
-            #print(f"p: {packet}")
+            # print(f"p: {packet}")
             self.dev_proc.on_packet(packet)
             self.recorded_traffic.append(packet)
 

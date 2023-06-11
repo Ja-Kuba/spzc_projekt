@@ -1,7 +1,6 @@
 from scapy.layers.l2 import Ether
 from threading import Thread
 from queue import Queue
-from time import sleep
 
 
 # Base interface for processor
@@ -48,7 +47,6 @@ class PacketProcessor:
     def __thread_loop(self, queue):
         while self.run:
             if queue.empty():
-                #sleep(.1)
                 continue
             packet = queue.get()
             self.process_packet(packet)

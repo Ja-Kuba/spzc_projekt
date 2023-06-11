@@ -3,13 +3,20 @@ from scapy.layers.inet import IP, TCP
 from scapy.packet import Packet
 from src.conf_reader import ConfReader
 from csv import reader
+import os
+import shutil
 
 
-def create_packet(line):
-    # print(row)
-    # for i, r in enumerate(row):
-    # print(f"{i}: {r}")
-    # protocol = row[5]
+def clear_files():
+    output_folder = 'outputs'
+    for filename in os.listdir(output_folder):
+        file_path = os.path.join(output_folder, filename)
+        if os.path.isfile(file_path) or os.path.islink(file_path):
+            print("EUREKA" + file_path)
+            os.unlink(file_path)
+
+
+def create_packet():
     if row[0] == "Source":
         return None
     # [0'Source', 1'Destination', 2'sport', 3'dport', 4'SYN', 5'ACK', 6'Protocol', 'Info']
@@ -38,10 +45,9 @@ def make_packet(sip, dip, sport, dport, tcp_flags):
     return packet
 
 
-def make_traffic(line, i):
-    packet = create_packet(line)
+def make_traffic():
+    packet = create_packet()
     if packet:
-        # print(f'{i}. send')
         p.manage(packet)
 
 
@@ -54,8 +60,9 @@ def show_stats(line):
 
 
 if __name__ == '__main__':
+    clear_files()
     c = ConfReader()
-    _, trw_conf = c.read_conf('conf_CICIDS.ini')
+    _, trw_conf = c.read_conf('input_data/conf_CICIDS.ini')
     p = PacketsManagerTcpUdp(trw_conf=trw_conf)
 
     data_filepath = 'datasets/raw_tcp_flags_syn_only.csv'
@@ -65,12 +72,10 @@ if __name__ == '__main__':
         csv_r = reader(f)
         for row in csv_r:
             i += 1
-            make_traffic(row, i)
+            make_traffic()
 
             if i % 500 == 0:
                 print(f"{i} packets processed")
-                break
-            # dumpStats()
 
     print("DONE")
     p.stop()
