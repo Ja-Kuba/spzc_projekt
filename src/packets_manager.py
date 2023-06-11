@@ -35,7 +35,7 @@ class PacketsManagerTcpUdp(PacketsManager):
         self.dev_proc = TRWProcessor(conf=trw_conf)
 
     def __del__(self):
-        #self.dev_proc.stop()
+        # self.dev_proc.stop()
         pass
 
     def manage(self, packet):

@@ -10,7 +10,7 @@ if __name__ == "__main__":
     
     try:
         c =  ConfReader()
-        sniffer_conf, trw_conf = c.readConf(argv[1])
+        sniffer_conf, trw_conf = c.read_conf(argv[1])
 
         p = PacketsManagerTcpUdp(trw_conf = trw_conf)
         s = Sniffer(p)

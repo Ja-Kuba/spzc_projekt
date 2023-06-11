@@ -23,31 +23,31 @@ class TRWProcessor(PacketProcessor):
             Pf=self.conf['Pf'],
             theta0=self.conf['theta0'],
             theta1=self.conf['theta1'],
-            status_file='status_ports.log',
+            status_file='outputs/status_ports.log',
         )
         super().__init__()       
-        self.name= "TRWProcessor"
+        self.name = "TRWProcessor"
         self.stats_dump_cnt = 0
         self.stats_dump_period = self.conf['stats_dump_period']
 
     def __del__(self):
-        #in super __del__ thread is joined!!!
+        # in super __del__ thread is joined!!!
         super().__del__()
-        #self.dumpStats()
+        # self.dumpStats()
 
     def stop(self):
         super().stop()
-        self.dumpStats()
+        self.dump_stats()
 
-    def dumpStats(self):
-        self.trw.storeStatsInFile()
-        self.trw_ports.storeStatsInFile()
+    def dump_stats(self):
+        self.trw.store_stats_in_file()
+        self.trw_ports.store_stats_in_file()
 
     def on_packet(self, packet: Ether):
         self.stats_dump_cnt += 1
         if self.stats_dump_cnt % self.stats_dump_period == 0:
             self.stats_dump_cnt=0
-            self.dumpStats()
+            self.dump_stats()
 
         return super().on_packet(packet)
 

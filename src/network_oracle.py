@@ -5,7 +5,7 @@ import ipaddress
 # within local network tells if connection may be successful
 # Solution requires that list must be updated along wih network modifications 
 class NetworkOracle:
-    def __init__(self, wisdom_source:str='wisdom.txt', local_network='192.168.1.0/24') -> None:
+    def __init__(self, wisdom_source: str = 'wisdom.txt', local_network='192.168.1.0/24') -> None:
         print(f"Local network: {local_network}")
         self.wisdom_source = wisdom_source
         self.local_network = local_network
@@ -29,6 +29,6 @@ class NetworkOracle:
 
     def ask(self, ip_dst, dst_port):
         dest = f'{ip_dst}:{dst_port}'
-        #print(f"ask: {dest}")
-        
+        # print(f"ask: {dest}")
+
         return (True if dest in self.wisdom else False)
