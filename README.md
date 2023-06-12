@@ -11,9 +11,16 @@ pip install -r requirements.txt
 ## Zawartość repozytorium
 
 ### Katalogi
-`datasets` - wykorzystane zbiory testowe
+`datasets` - wykorzystane zbiory testowe\
 `src` - pliki źródłowe aplikacji
 
 ### Skrypty
-`main.py` - główny plik służący do uruchomienia aplikacji
-`test_cicids2017.py` - skrypt wykorzystany do przeprowadzenia testów na zbiorze CICIDS2017
+`main.py` - główny plik służący do uruchomienia aplikacji\
+`test_cicids2017.py` - skrypt wykorzystany do przeprowadzenia testów na zbiorze CICIDS2017\oraz testów wydajnościowych\
+`test_port_stats.py` - skrypt wykorzystany do przeprowadzenia badań statystycznych\
+`CICIDS2017_raw_wisdom.txt` - plik z listą wiedzy dla wyroczni na potrzeby testów na zbiorze CICIDS2017\
+`conf.ini` - domyślny plik konfiguracyjny 
+`conf_CICIDS.ini` - plik konfiguracyjny dla zbioru CICIDS2017
+
+
+
