@@ -10,7 +10,9 @@ Implementacja systemu detekcji skanowania portów z pojedynczego źródła, z wy
 
 ### Katalogi
 [datasets](datasets) - wykorzystane zbiory testowe\
-[src](src) - pliki źródłowe aplikacji
+[src](src) - pliki źródłowe aplikacji\
+[figs](figs) - wizualizacja wyników\
+[article](article) - powiązany artykuł omawiający wykonaną implementację
 
 ### Skrypty
 - [main.py](main.py) - **plik main** służący do uruchomienia aplikacji
