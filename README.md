@@ -15,12 +15,12 @@ pip install -r requirements.txt
 [src](src) - pliki źródłowe aplikacji
 
 ### Skrypty
-[main.py](main.py) - główny plik służący do uruchomienia aplikacji\
-[test_cicids2017.py](test_cicids2017.py) - skrypt wykorzystany do przeprowadzenia testów na zbiorze CICIDS2017\oraz testów wydajnościowych\
-[test_port_stats.py](test_port_stats.py) - skrypt wykorzystany do przeprowadzenia badań statystycznych\
-[CICIDS2017_raw_wisdom.txt](CICIDS2017_raw_wisdom.txt) - plik z listą wiedzy dla wyroczni na potrzeby testów na zbiorze CICIDS2017\
-[conf.ini](conf.ini) - domyślny plik konfiguracyjny\
-[conf_CICIDS.ini](conf_CICIDS.ini) - plik konfiguracyjny dla zbioru CICIDS2017
+- [main.py](main.py) - **plik main** służący do uruchomienia aplikacji
+- [test_cicids2017.py](test_cicids2017.py) - skrypt wykorzystany do przeprowadzenia testów na zbiorze CICIDS2017oraz testów wydajnościowych
+- [test_port_stats.py](test_port_stats.py) - skrypt wykorzystany do przeprowadzenia badań statystycznych
+- [CICIDS2017_raw_wisdom.txt](CICIDS2017_raw_wisdom.txt) - plik z listą wiedzy dla wyroczni na potrzeby testów na zbiorze CICIDS2017
+- [conf.ini](conf.ini) - domyślny plik konfiguracyjny
+- [conf_CICIDS.ini](conf_CICIDS.ini) - plik konfiguracyjny dla zbioru CICIDS2017
 
 
 
@@ -28,10 +28,24 @@ pip install -r requirements.txt
 
 
 
-[conf_reader.py](src/conf_reader.py) - klasa odpowiedzialna za wczytywanie konfiguracji\
-[sniffer.py](src/sniffer.py) - klasa odpowiedzialna za przechwytywanie ruchu sieciowego\
-[packets_manager.py](src/packets_manager.py) - klasa odpowiedzialna za wstępną analizę pakietów i przekazywanie do odpowiednich procesorów\
-[packet_processor.py](src/packet_processor.py) - klasa bazowa procesora do właściwej analizy ruchu\
-[trw_processor.py](src/trw_processor.py) - klasa procesora analizującego ruch z wykorzytsaniem **TRW** i **TRWP**\
-[trw.py](src/trw.py) - realizacja algorytmów **TRW** i **TRWP**\
-[network_oracle.py](src/network_oracle.py) - wyrocznia dla algorytmów **TRW** I **TRWP**
+- [conf_reader.py](src/conf_reader.py) - klasa odpowiedzialna za wczytywanie konfiguracji
+- [sniffer.py](src/sniffer.py) - klasa odpowiedzialna za przechwytywanie ruchu sieciowego
+- [packets_manager.py](src/packets_manager.py) - klasa odpowiedzialna za wstępną analizę pakietów i przekazywanie do odpowiednich procesorów
+- [packet_processor.py](src/packet_processor.py) - klasa bazowa procesora do właściwej analizy ruchu
+- [trw_processor.py](src/trw_processor.py) - klasa procesora analizującego ruch z wykorzytsaniem **TRW** i **TRWP**
+- [trw.py](src/trw.py) - realizacja algorytmów **TRW** i **TRWP**
+- [network_oracle.py](src/network_oracle.py) - wyrocznia dla algorytmów **TRW** I **TRWP**
+
+
+## Uruchomienie aplikacji
+
+Do napisania i testowania aplikacji wykorzystano **Python3.11** oraz oprogramowanie **ncap-1.75**.
+System uruchomiony został w systemi Windows 10.
+
+
+Wszystkie wymagane zależności zawarto w pliku [requirements.txt](requirements.txt)
+
+##### Przykładowe uruchomienie apikacji
+```bash
+python main.py conf.ini
+```
