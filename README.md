@@ -1,6 +1,6 @@
 # OPIS PROJEKTU
 
-Implementacja systemu detekcji skanowania portów z pojedynczego źródła, z wykorzystaniem metod statystycznych w oparciu o algoryt TRW zaproponowany przez J. Jung, V. Paxson, A. W. Berger, H. Balakrishnan w pracy "Fast portscan detection using sequential hypothesis testing.", wraz z  jego modyfikacją pozwalającą na wykrywanie skanów wertykalnych.
+Implementacja systemu detekcji skanowania portów z pojedynczego źródła, z wykorzystaniem metod statystycznych w oparciu o algoryt  **TRW** (*ang. "threshold random walk"*)  zaproponowany przez J. Jung, V. Paxson, A. W. Berger, H. Balakrishnan w pracy "Fast portscan detection using sequential hypothesis testing.", wraz z  jego modyfikacją pozwalającą na wykrywanie skanów wertykalnych (**TRWP**).
 
 
 
@@ -24,3 +24,14 @@ pip install -r requirements.txt
 
 
 
+### Pliki źródłowe
+
+
+
+[conf_reader.py](src/conf_reader.py) - klasa odpowiedzialna za wczytywanie konfiguracji
+[sniffer.py](src/sniffer.py) - klasa odpowiedzialna za przechwytywanie ruchu sieciowego
+[packets_manager.py](src/packets_manager.py) - klasa odpowiedzialna za wstępną analizę pakietów i przekazywanie do odpowiednich procesorów
+[packet_processor.py](src/packet_processor.py) - klasa bazowa procesora do właściwej analizy ruchu
+[trw_processor.py](src/trw_processor.py) - klasa procesora analizującego ruch z wykorzytsaniem **TRW** i **TRWP**
+[trw.py](src/trw.py) - realizacja algorytmów **TRW** i **TRWP**
+[network_oracle.py](src/network_oracle.py) - wyrocznia dla algorytmów **TRW** I **TRWP**
