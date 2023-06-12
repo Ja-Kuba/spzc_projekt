@@ -1,25 +1,19 @@
-# SPZC PROJEKT
+# OPIS PROJEKTU
 
-
-## SNIFFER
-
-
-``` bash
-pip3 install scapy
-```
-For Windows scapy needs [npcap](https://npcap.com/) to work
+Implementacja systemu detekcji skanowania portów z pojedynczego źródła, z wykorzystaniem metod statystycznych w oparciu o algoryt TRW zaproponowany przez J. Jung, V. Paxson, A. W. Berger, H. Balakrishnan w pracy "Fast portscan detection using sequential hypothesis testing.", wraz z  jego modyfikacją pozwalającą na wykrywanie skanów wertykalnych.
 
 
 
-## Some useful data
-### Protocols
-Protocols numbers specification: 
-https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml
 
-- 6 **TPC**
-- 17 **UDP**
 
-## References:
- * Jung, Jaeyeon, et al. "Fast portscan detection using sequential hypothesis 
-   testing." IEEE Symposium on Security and Privacy, 2004. Proceedings. 2004. 
-   IEEE, 2004.
+pip install -r requirements.txt
+
+## Zawartość repozytorium
+
+### Katalogi
+`datasets` - wykorzystane zbiory testowe
+`src` - pliki źródłowe aplikacji
+
+### Skrypty
+`main.py` - główny plik służący do uruchomienia aplikacji
+`test_cicids2017.py` - skrypt wykorzystany do przeprowadzenia testów na zbiorze CICIDS2017

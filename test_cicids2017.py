@@ -88,33 +88,37 @@ if __name__ == '__main__':
     c = ConfReader()
     _, trw_conf = c.readConf('conf_CICIDS.ini')
     p = PacketsManagerTcpUdp(trw_conf=trw_conf)
+    test_cids = False
+    test_resources = True
 
-    # data_filepath = 'C:\\Projekty\\SPZC\\CICIDS2017\\raw_traffic\\raw_tcp_flags_syn_only.csv'
-    # #data_filepath = 'C:\\Projekty\\SPZC\\CICIDS2017\\raw_traffic\\raw_tcp_test.csv'
+    if test_cids:
+        data_filepath = 'C:\\Projekty\\SPZC\\CICIDS2017\\raw_traffic\\raw_tcp_flags_syn_only.csv'
+        #data_filepath = 'C:\\Projekty\\SPZC\\CICIDS2017\\raw_traffic\\raw_tcp_test.csv'
 
-    # i = 0
-    # with open(data_filepath) as f:
-    #     csv_r = reader(f)
-    #     start = perf_counter()
-    #     for row in csv_r:
-    #         i +=1
-    #         make_traffic(row, i)
+        i = 0
+        with open(data_filepath) as f:
+            csv_r = reader(f)
+            start = perf_counter()
+            for row in csv_r:
+                i +=1
+                make_traffic(row, i)
 
-    #         if i % 5000 == 0 :
-    #             print(f"{i} packets processed")
-    #             #break
-    #         #showStats(row)
-    #     elapse = perf_counter() - start
+                if i % 5000 == 0 :
+                    print(f"{i} packets processed")
+                    #break
+                #showStats(row)
+            elapse = perf_counter() - start
+        
+        print(f"DONE in: {elapse}")
     
-    # print(f"DONE in: {elapse}")
-    
-    start = perf_counter()
-    
-    test_packet('1.1.1.1', '255.255.255.255', max_count=10000)
-    #test_packet('1.1.1.1', '255.255.255.255', max_count=100000)
+    if test_resources:
+        start = perf_counter()
+        
+        test_packet('1.1.1.1', '255.255.255.255', max_count=10000)
+        #test_packet('1.1.1.1', '255.255.255.255', max_count=100000)
 
-    elapse = perf_counter() - start
-    print(f"DONE in: {elapse}")
+        elapse = perf_counter() - start
+        print(f"DONE in: {elapse}")
 
 
     p.stop()
