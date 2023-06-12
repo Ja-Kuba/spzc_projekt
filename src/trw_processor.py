@@ -23,7 +23,7 @@ class TRWProcessor(PacketProcessor):
             Pf=self.conf['Pf'],
             theta0=self.conf['theta0'],
             theta1=self.conf['theta1'],
-            status_file='status_ports.log',
+            status_file='status_ports.json',
         )
         super().__init__()       
         self.name= "TRWProcessor"

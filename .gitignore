@@ -167,3 +167,5 @@ detected.txt
 .idea
 src/test.py
 raw_tcp_test.csv
+status_ports.json
+status.json

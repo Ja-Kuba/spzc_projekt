@@ -81,7 +81,7 @@ class RemoteHostData:
 
 class TRW:
     def __init__(self, Pd, Pf, theta0, theta1, 
-                 status_file='status.log', detected_file='detected.log') -> None:
+                 status_file='status.json', detected_file='detected.log') -> None:
         self.Pd = Pd 
         self.Pf = Pf
         self.theta0 = theta0
@@ -172,7 +172,7 @@ class TRW:
 #TRW modification which allows to detect single source vertical scans
 class TRWPorts(TRW):
     def __init__(self, Pd, Pf, theta0, theta1, 
-                 status_file='status_ports.log', detected_file='detected_ports.log') -> None:
+                 status_file='status_ports.json', detected_file='detected_ports.log') -> None:
         super().__init__(Pd, Pf, theta0, theta1, status_file, detected_file)
 
     def put(self, succesful, ip_src, ip_dst, dport):
