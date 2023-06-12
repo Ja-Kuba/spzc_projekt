@@ -40,7 +40,7 @@ Implementacja systemu detekcji skanowania portów z pojedynczego źródła, z wy
 Do napisania i testowania aplikacji wykorzystano **Python3.11** oraz oprogramowanie [**ncap-1.75**](https://npcap.com/).
 System uruchomiony został w systemi Windows 10.
 
-Wszystkie wymagane zależności wymagane do uruchomienia zawarto w pliku [requirements.txt](requirements.txt).
+Wszystkie zależności wymagane do uruchomienia zawarto w pliku [requirements.txt](requirements.txt).
 
 
 Przed uruchomieniem należy utworzyć plik z wiedzą dla wyroczni oraz plik konfiguracyjny systemu.\
