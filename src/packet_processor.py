@@ -37,7 +37,7 @@ class PacketProcessor:
         return thread
 
     #
-    #  Thread functions should not be called from outside
+    #  Thread functions should not be called from outside class
     #
     def process_packet(self, packet):
         print(f"P: {packet}")

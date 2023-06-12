@@ -42,20 +42,15 @@ class TRWProcessor(PacketProcessor):
     def on_packet(self, packet: Ether):
         return super().on_packet(packet)
 
-    #just IPv4 support for now
     def process_packet(self, packet):
         if not packet['TCP'].flags == 0x02 or not IP in packet:
-        #if not IP in packet:
             return
         
-        #print(f"CHECK: {packet}; {packet.flags}")
         dst_port = int(packet[TCP].dport)
         if IP in packet:
             ip_src = packet[IP].src
             ip_dst = packet[IP].dst
-        # if IPv6 in packet:
-        #     ip_dst = packet[IPv6].dst
-        #     ip_src = packet[IPv6].src
+
 
         # we want to check only if local network is being scanned
         if not self.oracle.if_local_dest(ip_dst):
@@ -71,7 +66,7 @@ class TRWProcessor(PacketProcessor):
 
 
     def process_connection(self, ip_src, ip_dst, dst_port):
-        #if connection may be succesful based on Oracle wisedom
+        #cehck if connection may be succesful based on Oracle wisedom
         succesful = self.oracle.ask(ip_dst, dst_port)
         self.trw.put(succesful, str(ip_src), str(ip_dst))
         self.trw_ports.put(succesful, str(ip_src), str(ip_dst), dst_port)

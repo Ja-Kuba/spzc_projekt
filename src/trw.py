@@ -1,11 +1,14 @@
+# Threshold Random Walk implementation based on:
+# Jaeyeon Jung, Vern Paxson, Arthur W. Berger, and Hari Balakrishnan
+# "Fast Portscan Detection Using Sequential Hypothesis Testing"
+
+
 from dataclasses import dataclass, field, asdict, is_dataclass
 import datetime
 from json import JSONDecoder, JSONEncoder
 import json
 from os.path import isfile
-# Threshold Random Walk implementation based on:
-# Jaeyeon Jung, Vern Paxson, Arthur W. Berger, and Hari Balakrishnan
-# "Fast Portscan Detection Using Sequential Hypothesis Testing"
+
 
 PENDING ='PENDING' 
 BENIGN = 'BENIGN'
@@ -48,6 +51,8 @@ class RemoteHostDataJSONDecoder(JSONDecoder):
             return dct
 
 
+
+# store current state for remote host
 @dataclass
 class RemoteHostData:
     ip_addr:str
@@ -71,6 +76,8 @@ class RemoteHostData:
     #     with open(f'{self.ip_addr}_logs.log', 'a', encoding='utf-8') as f:
     #         w = f'{self.Ss}, {self.Ls}, {self.conn_fail}, {self.conn_num}\n'
     #         f.write(w)
+
+
 
 class TRW:
     def __init__(self, Pd, Pf, theta0, theta1, 
@@ -162,7 +169,7 @@ class TRW:
 
 
 
-
+#TRW modification which allows to detect single source vertical scans
 class TRWPorts(TRW):
     def __init__(self, Pd, Pf, theta0, theta1, 
                  status_file='status_ports.log', detected_file='detected_ports.log') -> None:

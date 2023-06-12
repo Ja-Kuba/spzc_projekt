@@ -1,3 +1,6 @@
+# @author Jakub Kowalczuk
+#
+
 from src.packets_manager import PacketsManagerTcpUdp
 from src.sniffer import Sniffer
 from sys import argv, exit

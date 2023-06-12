@@ -1,7 +1,7 @@
 from configparser import ConfigParser, NoOptionError, NoSectionError
 import os.path
 
-
+#class for loading configuration file
 class ConfReader:
 
     def __init__(self):
